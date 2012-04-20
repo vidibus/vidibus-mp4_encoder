@@ -1,0 +1,6 @@
+pkg/*
+Gemfile.lock
+*.gem
+.bundle
+rdoc
+coverage
