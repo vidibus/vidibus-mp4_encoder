@@ -101,8 +101,8 @@ module Vidibus
     flag(:audio_channels) { |value| "-ac #{value}" }
     flag(:audio_sample_rate) { |value| "-ar #{value}" }
     flag(:aspect_ratio) { |value| "-aspect #{value}" }
-    flag(:video_codec_level) { |value| "-level #{value}" }
     flag(:video_profile) { |value| "-vprofile #{value}" }
+    flag(:video_codec_level) { |value| "-vlevel #{value}" }
 
     flag(:video_bit_rate) do |value|
       output = "-vb #{value}"
