@@ -182,7 +182,7 @@ module Vidibus
     # The encoding recipe.
     def recipe
       audio = %(-acodec %{audio_codec} %{audio_sample_rate} %{audio_bit_rate} %{audio_channels} -async 2)
-      video = %(-vcodec %{video_codec} %{dimensions} %{video_bit_rate} %{frame_rate} %{video_profile} %{video_codec_level} %{preset})
+      video = %(-vcodec %{video_codec} %{dimensions} %{video_bit_rate} %{frame_rate} %{video_profile} %{video_codec_level} -deinterlace %{preset})
       "ffmpeg -i %{input} #{audio} #{video} -y -threads 0 %{output}"
     end
   end
