@@ -105,7 +105,7 @@ module Vidibus
     flag(:video_codec_level) { |value| "-level #{value}" }
 
     flag(:video_bit_rate) do |value|
-      output = "-b #{value} "
+      output = "-vb #{value}"
       if profile.constant_bit_rate
         output << " -vmaxrate #{value} -vbufsize #{value}"
       end
