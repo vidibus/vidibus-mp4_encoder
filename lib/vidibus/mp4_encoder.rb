@@ -2,7 +2,7 @@ module Vidibus
   class Mp4Encoder < Vidibus::Encoder::Base
     class ProfileError < Vidibus::Encoder::ProfileError; end
 
-    VERSION = '0.1.0'
+    VERSION = '0.1.1'
 
     DEFAULT_AUDIO_CODEC = 'aac'
     DEFAULT_VIDEO_CODEC = 'h264'
