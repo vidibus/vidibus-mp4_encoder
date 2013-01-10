@@ -8,6 +8,10 @@ module Vidibus
     VIDEO_CODEC = 'h264'
     VIDEO_PROFILE = 'main'
     VIDEO_CODEC_LEVEL = '3.1'
+    VIDEO_FILTER = {
+      :baseline => 'yadif=0:-1:1,hqdn3d=1.5:1.5:6:6',
+      :main => 'yadif=0:-1:1'
+    }
 
     # Common profile settings.
     def self.profile_presets
@@ -143,6 +147,10 @@ module Vidibus
       end
     end
 
+    flag(:video_filter) do |value|
+      %(-filter:v "#{value}")
+    end
+
     # Set default options for current profile:
     #
     #   audio_codec: 'aac'
@@ -157,6 +165,7 @@ module Vidibus
       profile.settings[:video_codec_level] ||= begin
         profile.video_profile.to_s == 'baseline' ? '3.0': VIDEO_CODEC_LEVEL
       end
+      profile.settings[:video_filter] ||= VIDEO_FILTER[profile.video_profile.to_sym]
       super
     end
 
@@ -172,7 +181,7 @@ module Vidibus
     # The encoding recipe.
     def recipe
       audio = %(-acodec %{audio_codec} %{audio_sample_rate} %{audio_bit_rate} %{audio_channels} -async 2)
-      video = %(-vcodec %{video_codec} %{dimensions} %{video_bit_rate} %{frame_rate} %{video_profile} %{video_codec_level} -deinterlace)
+      video = %(-vcodec %{video_codec} %{dimensions} %{video_filter} %{video_bit_rate} %{frame_rate} %{video_profile} %{video_codec_level} -deinterlace)
       "ffmpeg -i %{input} #{audio} #{video} -y -threads 0 %{output}"
     end
   end
