@@ -8,10 +8,6 @@ module Vidibus
     VIDEO_CODEC = 'h264'
     VIDEO_PROFILE = 'main'
     VIDEO_CODEC_LEVEL = '3.1'
-    PRESETS = {
-      :baseline => 'coder=0 bf=0 flags2=-wpred-dct8x8',
-      :main => 'coder=1 flags=+loop cmp=+chroma partitions=+parti8x8+parti4x4+partp8x8+partb8x8 me_method=hex subq=7  i_qfactor=0.71 directpred=1 flags2=+wpred+fastpskip-dct8x8'
-    }
 
     # Common profile settings.
     def self.profile_presets
@@ -131,11 +127,6 @@ module Vidibus
       "-r #{value} -g #{gop} -keyint_min #{gop}"
     end
 
-    # Convert the preset args
-    flag(:preset) do |value|
-      '-' + value.gsub(/\s+/, ' -').gsub(/\=/, ' ')
-    end
-
     flag(:audio_codec) do |value|
       if value == 'aac'
         'libfaac'
@@ -166,7 +157,6 @@ module Vidibus
       profile.settings[:video_codec_level] ||= begin
         profile.video_profile.to_s == 'baseline' ? '3.0': VIDEO_CODEC_LEVEL
       end
-      profile.settings[:preset] ||= PRESETS[profile.video_profile.to_sym]
       super
     end
 
@@ -182,7 +172,7 @@ module Vidibus
     # The encoding recipe.
     def recipe
       audio = %(-acodec %{audio_codec} %{audio_sample_rate} %{audio_bit_rate} %{audio_channels} -async 2)
-      video = %(-vcodec %{video_codec} %{dimensions} %{video_bit_rate} %{frame_rate} %{video_profile} %{video_codec_level} -deinterlace %{preset})
+      video = %(-vcodec %{video_codec} %{dimensions} %{video_bit_rate} %{frame_rate} %{video_profile} %{video_codec_level} -deinterlace)
       "ffmpeg -i %{input} #{audio} #{video} -y -threads 0 %{output}"
     end
   end
