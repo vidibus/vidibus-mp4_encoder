@@ -4,11 +4,11 @@ module Vidibus
 
     VERSION = '0.1.1'
 
-    DEFAULT_AUDIO_CODEC = 'aac'
-    DEFAULT_VIDEO_CODEC = 'h264'
-    DEFAULT_VIDEO_PROFILE = 'main'
-    DEFAULT_VIDEO_CODEC_LEVEL = '3.1'
-    DEFAULT_PRESETS = {
+    AUDIO_CODEC = 'aac'
+    VIDEO_CODEC = 'h264'
+    VIDEO_PROFILE = 'main'
+    VIDEO_CODEC_LEVEL = '3.1'
+    PRESETS = {
       :baseline => 'coder=0 bf=0 flags2=-wpred-dct8x8',
       :main => 'coder=1 flags=+loop cmp=+chroma partitions=+parti8x8+parti4x4+partp8x8+partb8x8 me_method=hex subq=7  i_qfactor=0.71 directpred=1 flags2=+wpred+fastpskip-dct8x8'
     }
@@ -160,13 +160,13 @@ module Vidibus
     #   video_codec_level: '3.1'
     #   preset: [the :main present]
     def preprocess
-      profile.settings[:audio_codec] ||= DEFAULT_AUDIO_CODEC
-      profile.settings[:video_codec] ||= DEFAULT_VIDEO_CODEC
-      profile.settings[:video_profile] ||= DEFAULT_VIDEO_PROFILE
+      profile.settings[:audio_codec] ||= AUDIO_CODEC
+      profile.settings[:video_codec] ||= VIDEO_CODEC
+      profile.settings[:video_profile] ||= VIDEO_PROFILE
       profile.settings[:video_codec_level] ||= begin
-        profile.video_profile.to_s == 'baseline' ? '3.0': DEFAULT_VIDEO_CODEC_LEVEL
+        profile.video_profile.to_s == 'baseline' ? '3.0': VIDEO_CODEC_LEVEL
       end
-      profile.settings[:preset] ||= DEFAULT_PRESETS[profile.video_profile.to_sym]
+      profile.settings[:preset] ||= PRESETS[profile.video_profile.to_sym]
       super
     end
 
