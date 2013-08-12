@@ -7,7 +7,7 @@ module Vidibus
     AUDIO_CODEC = 'aac'
     VIDEO_CODEC = 'h264'
     VIDEO_PROFILE = 'main'
-    VIDEO_CODEC_LEVEL = '3.1'
+    VIDEO_CODEC_LEVEL = '3.2'
     VIDEO_FILTER = {
       :baseline => 'yadif=0:-1:1,hqdn3d=1.5:1.5:6:6',
       :main => 'yadif=0:-1:1'
