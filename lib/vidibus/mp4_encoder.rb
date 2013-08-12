@@ -172,7 +172,7 @@ module Vidibus
     #   audio_codec: 'aac'
     #   video_codec: 'h264'
     #   video_profile: 'main'
-    #   video_codec_level: '3.1'
+    #   video_codec_level: '3.2'
     #   preset: [the :main present]
     def preprocess
       profile.settings[:audio_codec] ||= AUDIO_CODEC
