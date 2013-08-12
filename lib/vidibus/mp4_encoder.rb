@@ -132,18 +132,20 @@ module Vidibus
     end
 
     flag(:audio_codec) do |value|
-      if value == 'aac'
-        'libfaac'
+      case value
+      when 'aac', 'libfaac' then 'libfaac'
+      when 'mp3', 'libmp3lame' then 'libmp3lame'
+      when 'libfdk_aac' then 'libfdk_aac'
       else
-        raise 'aac is the only audio codec supported right now'
+        raise 'unsupported audio codec'
       end
     end
 
     flag(:video_codec) do |value|
-      if value == 'h264'
-        'libx264'
+      case value
+      when 'h264', 'libx264' then 'libx264'
       else
-        raise 'h264 is the only video codec supported right now'
+        raise 'Unsupported video codec'
       end
     end
 
