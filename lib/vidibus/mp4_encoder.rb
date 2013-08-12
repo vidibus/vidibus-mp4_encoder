@@ -97,6 +97,8 @@ module Vidibus
 
     private
 
+    flag(:offset) { |value| "-ss #{value}" }
+    flag(:duration) { |value| "-t #{value}" }
     flag(:audio_bit_rate) { |value| "-ab #{value}" }
     flag(:audio_channels) { |value| "-ac #{value}" }
     flag(:audio_sample_rate) { |value| "-ar #{value}" }
@@ -201,7 +203,7 @@ module Vidibus
         audio << ' -async 2'
       end
       video = %(-vcodec %{video_codec} %{dimensions} %{video_filter} %{video_bit_rate} %{frame_rate} %{video_profile} %{video_codec_level})
-      "ffmpeg -i %{input} #{audio} #{video} -y -threads 0 %{output}"
+      "ffmpeg -i %{input} %{offset} %{duration} #{audio} #{video} -y -threads 0 %{output}"
     end
   end
 end
