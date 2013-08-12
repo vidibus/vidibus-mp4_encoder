@@ -114,9 +114,11 @@ module Vidibus
 
     # Set dimensions and aspect ratio to remove anamorphosis.
     flag(:dimensions) do
-      modulus = profile.dimensions_modulus || 8
-      value = profile.dimensions(modulus)
-      "-s #{value} -aspect #{profile.aspect_ratio(modulus)}"
+      unless copy_video?
+        modulus = profile.dimensions_modulus || 8
+        value = profile.dimensions(modulus)
+        "-s #{value} -aspect #{profile.aspect_ratio(modulus)}"
+      end
     end
 
     # Try to find a matching frame rate, if several ones are given. If no
@@ -133,6 +135,7 @@ module Vidibus
 
     flag(:audio_codec) do |value|
       case value
+      when 'copy' then 'copy'
       when 'aac', 'libfaac' then 'libfaac'
       when 'mp3', 'libmp3lame' then 'libmp3lame'
       when 'libfdk_aac' then 'libfdk_aac'
@@ -143,6 +146,7 @@ module Vidibus
 
     flag(:video_codec) do |value|
       case value
+      when 'copy' then 'copy'
       when 'h264', 'libx264' then 'libx264'
       else
         raise 'Unsupported video codec'
@@ -151,6 +155,14 @@ module Vidibus
 
     flag(:video_filter) do |value|
       %(-filter:v "#{value}")
+    end
+
+    def copy_video?
+      profile.settings[:video_codec] == 'copy'
+    end
+
+    def copy_audio?
+      profile.settings[:audio_codec] == 'copy'
     end
 
     # Set default options for current profile:
@@ -163,11 +175,13 @@ module Vidibus
     def preprocess
       profile.settings[:audio_codec] ||= AUDIO_CODEC
       profile.settings[:video_codec] ||= VIDEO_CODEC
-      profile.settings[:video_profile] ||= VIDEO_PROFILE
-      profile.settings[:video_codec_level] ||= begin
-        profile.video_profile.to_s == 'baseline' ? '3.0': VIDEO_CODEC_LEVEL
+      unless copy_video?
+        profile.settings[:video_profile] ||= VIDEO_PROFILE
+        profile.settings[:video_codec_level] ||= begin
+          profile.video_profile.to_s == 'baseline' ? '3.0': VIDEO_CODEC_LEVEL
+        end
+        profile.settings[:video_filter] ||= VIDEO_FILTER[profile.video_profile.to_sym]
       end
-      profile.settings[:video_filter] ||= VIDEO_FILTER[profile.video_profile.to_sym]
       super
     end
 
@@ -182,7 +196,10 @@ module Vidibus
 
     # The encoding recipe.
     def recipe
-      audio = %(-acodec %{audio_codec} %{audio_sample_rate} %{audio_bit_rate} %{audio_channels} -async 2)
+      audio = %(-acodec %{audio_codec} %{audio_sample_rate} %{audio_bit_rate} %{audio_channels})
+      unless copy_audio?
+        audio << ' -async 2'
+      end
       video = %(-vcodec %{video_codec} %{dimensions} %{video_filter} %{video_bit_rate} %{frame_rate} %{video_profile} %{video_codec_level})
       "ffmpeg -i %{input} #{audio} #{video} -y -threads 0 %{output}"
     end
