@@ -4,7 +4,7 @@ $:.unshift lib unless $:.include?(lib)
 
 Gem::Specification.new do |s|
   s.name        = 'vidibus-mp4_encoder'
-  s.version     = '0.2.0'
+  s.version     = '0.2.1'
   s.platform    = Gem::Platform::RUBY
   s.authors     = 'André Pankratz'
   s.email       = 'andre@vidibus.com'
