@@ -105,6 +105,7 @@ module Vidibus
     flag(:aspect_ratio) { |value| "-aspect #{value}" }
     flag(:video_profile) { |value| "-profile:v #{value}" }
     flag(:video_codec_level) { |value| "-level:v #{value}" }
+    flag(:threads) { |value| "-threads #{value}" }
 
     flag(:video_bit_rate) do |value|
       output = "-vb #{value}"
@@ -177,6 +178,7 @@ module Vidibus
     def preprocess
       profile.settings[:audio_codec] ||= AUDIO_CODEC
       profile.settings[:video_codec] ||= VIDEO_CODEC
+      profile.settings[:threads] ||= 0
       unless copy_video?
         profile.settings[:video_profile] ||= VIDEO_PROFILE
         profile.settings[:video_codec_level] ||= begin
@@ -203,7 +205,7 @@ module Vidibus
         audio << ' -async 2'
       end
       video = %(-vcodec %{video_codec} %{dimensions} %{video_filter} %{video_bit_rate} %{frame_rate} %{video_profile} %{video_codec_level})
-      "ffmpeg -i %{input} %{offset} %{duration} #{audio} #{video} -y -threads 0 %{output}"
+      "ffmpeg -i %{input} %{offset} %{duration} #{audio} #{video} -y %{threads} %{output}"
     end
   end
 end
