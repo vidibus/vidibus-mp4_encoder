@@ -205,7 +205,7 @@ module Vidibus
         audio << ' -async 2'
       end
       video = %(-vcodec %{video_codec} %{dimensions} %{video_filter} %{video_bit_rate} %{frame_rate} %{video_profile} %{video_codec_level})
-      "ffmpeg -i %{input} %{offset} %{duration} #{audio} #{video} -y %{threads} %{output}"
+      "ffmpeg -analyzeduration 2147483647 -probesize 2147483647 -i %{input} %{offset} %{duration} #{audio} #{video} -y %{threads} %{output}"
     end
   end
 end
