@@ -202,7 +202,7 @@ module Vidibus
     def recipe
       audio = %(-acodec %{audio_codec} %{audio_sample_rate} %{audio_bit_rate} %{audio_channels})
       unless copy_audio?
-        audio << ' -async 2'
+        audio << ' -async 1'
       end
       video = %(-vcodec %{video_codec} %{dimensions} %{video_filter} %{video_bit_rate} %{frame_rate} %{video_profile} %{video_codec_level})
       "ffmpeg -analyzeduration 2147483647 -probesize 2147483647 -i %{input} %{offset} %{duration} #{audio} #{video} -y %{threads} %{output}"
