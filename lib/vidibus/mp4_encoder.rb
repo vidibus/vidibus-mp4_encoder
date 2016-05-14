@@ -99,7 +99,7 @@ module Vidibus
 
     flag(:offset) { |value| "-ss #{value}" }
     flag(:duration) { |value| "-t #{value}" }
-    flag(:audio_bit_rate) { |value| "-ab #{value}" }
+    flag(:audio_bit_rate) { |value| "-b:a #{value}" }
     flag(:audio_channels) { |value| "-ac #{value}" }
     flag(:audio_sample_rate) { |value| "-ar #{value}" }
     flag(:aspect_ratio) { |value| "-aspect #{value}" }
@@ -108,7 +108,7 @@ module Vidibus
     flag(:threads) { |value| "-threads #{value}" }
 
     flag(:video_bit_rate) do |value|
-      output = "-vb #{value}"
+      output = "-b:v #{value}"
       if profile.constant_bit_rate
         output << " -vmaxrate #{value} -vbufsize #{value}"
       end
