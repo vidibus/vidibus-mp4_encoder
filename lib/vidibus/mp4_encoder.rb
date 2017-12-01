@@ -139,7 +139,7 @@ module Vidibus
     flag(:audio_codec) do |value|
       case value
       when 'copy' then 'copy'
-      when 'aac', 'libfaac' then 'libfaac'
+      when 'aac', 'libfaac' then 'aac'
       when 'mp3', 'libmp3lame' then 'libmp3lame'
       when 'libfdk_aac' then 'libfdk_aac'
       else
